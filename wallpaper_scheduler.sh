@@ -27,40 +27,40 @@ do
 	currentHour="$(date +"%H")"
 	currentMinute="$(date +"%M")"
 
-	if [[ $currentHour -ge $sunRiseStart && $currentHour -lt $sunRiseEnd ]]
+	if [[ ${currentHour#0} -ge ${sunRiseStart#0} && ${currentHour#0} -lt ${sunRiseEnd#0} ]]
 	then
 		echo "It's sun rise/sun set time"
 		$(gsettings set org.cinnamon.desktop.background picture-uri  $sunRisePath)
-		sleepTime="$(( (($sunRiseEnd-$currentHour)*60*60)-$currentMinute*60 ))"
+		sleepTime="$(( (((10#$sunRiseEnd)-(10#$currentHour))*60*60)-((10#$currentMinute)*60) ))"
 		echo "will sleep for $sleepTime s"
 		sleep $sleepTime
 	else
-		if [[ $currentHour -ge $dayStart && $currentHour -lt $dayEnd ]]
+		if [[ ${currentHour#0} -ge ${dayStart#0} && ${currentHour#0} -lt ${dayEnd#0} ]]
 		then
 			echo "It's day time"
 			$(gsettings set org.cinnamon.desktop.background picture-uri $dayPath)
-			sleepTime="$(( (($dayEnd-$currentHour)*60*60)-($currentMinute*60) ))"
+			sleepTime="$(( (((10#$dayEnd)-(10#$currentHour))*60*60)-((10#$currentMinute)*60) ))"
 			echo "will sleep for $sleepTime s"
 			sleep $sleepTime
 		else
-			if [[ $currentHour -ge $sunSetStart && $currentHour -lt $sunSetEnd ]]
+			if [[ ${currentHour#0} -ge ${sunSetStart#0} && ${currentHour#0} -lt ${sunSetEnd#0} ]]
 			then
 				echo "It's sun set time"
 				$(gsettings set org.cinnamon.desktop.background picture-uri  $sunRisePath)
-				sleepTime="$(( (($sunSetEnd-$currentHour)*60*60)-($currentMinute*60) ))"
-				echo "will sleep for $sleeptime s"
+				sleepTime="$(( (((10#$sunSetEnd)-(10#$currentHour))*60*60)-((10#$currentMinute)*60) ))"
+				echo "will sleep for $sleepTime s"
 				sleep $sleepTime
 			else
 				$(gsettings set org.cinnamon.desktop.background picture-uri $nightPath)
-				if [[ $currentHour -ge $nightStart && $currentHour -le 23 ]]
+				if [[ ${currentHour#0} -ge ${nightStart#0} && ${currentHour#0} -le 23 ]]
 				then
 					echo "It's night time"
-					sleepTime="$(( ((24+$nightEnd-$currentHour)*60*60)-($currentMinute*60) ))"
+					sleepTime="$(( ((24+(10#$nightEnd)-(10#$currentHour))*60*60)-((10#$currentMinute)*60) ))"
 					echo "Will sleep for $sleepTime s"
 					sleep $sleepTime
 				else
 					echo "It's madruga time"
-					sleepTime="$(( (($nightEnd-$currentHour)*60*60)-($currentMinute*60) ))"
+					sleepTime="$(( (((10#$nightEnd)-(10#$currentHour))*60*60)-((10#$currentMinute)*60) ))"
 					echo "Will sleep for $sleepTime"
 					sleep $sleepTime
 				fi
